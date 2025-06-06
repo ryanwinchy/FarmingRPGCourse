@@ -2,8 +2,9 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
-  tags: []
+  serializedVersion: 3
+  tags:
+  - BoundsConfiner
   layers:
   - Default
   - TransparentFX
@@ -41,3 +42,32 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Ground1
+    uniqueID: 3638767471
+    locked: 0
+  - name: Ground2
+    uniqueID: 1862001051
+    locked: 0
+  - name: Ground3
+    uniqueID: 4274184611
+    locked: 0
+  - name: GroundDecoration1
+    uniqueID: 1017128347
+    locked: 0
+  - name: GroundDecoration2
+    uniqueID: 840606755
+    locked: 0
+  - name: Instances
+    uniqueID: 1253877815
+    locked: 0
+  - name: Front1
+    uniqueID: 1221413841
+    locked: 0
+  - name: Front2
+    uniqueID: 2471801205
+    locked: 0
+  - name: Collisions
+    uniqueID: 1585525027
+    locked: 0
+  m_RenderingLayers:
+  - Default
