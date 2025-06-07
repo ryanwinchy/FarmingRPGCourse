@@ -18,6 +18,7 @@ public class Player : SingletonMonobehaviour<Player>   //Inherits from singleton
     ToolEffect toolEffect = ToolEffect.None;
 
 
+    Camera mainCamera;
     private Rigidbody2D rigidBody2D;
 
 #pragma warning disable 414      //Disable console warning for unused player direction.
@@ -35,20 +36,27 @@ public class Player : SingletonMonobehaviour<Player>   //Inherits from singleton
         base.Awake();            //Execute the parent awake, making it singleton.
 
         rigidBody2D = GetComponent<Rigidbody2D>();
+
+        mainCamera = Camera.main;    //This is intensive so best to cache.
     }
 
     void Update()
     {
         #region Player Input
 
-        ResetAnimationTriggers();
+        if (!PlayerInputIsDisabled)        //so cant move while dragging inventory items and such.
+        {
+            ResetAnimationTriggers();
 
-        PlayerMovementInput();
+            PlayerMovementInput();
 
-        PlayerWalkInput();
+            PlayerWalkInput();
 
-        //Pass in movement params to any listeners for player movement input.
-        EventHandler.CallMovementEvent(xInput, yInput, isWalking, isRunning, isIdle, isCarrying, toolEffect, isUsingToolRight, isUsingToolLeft, isUsingToolUp, isUsingToolDown, isLiftingToolRight, isLiftingToolLeft, isLiftingToolUp, isLiftingToolDown, isPickingRight, isPickingLeft, isPickingUp, isPickingDown, isSwingingToolRight, isSwingingToolLeft, isSwingingToolUp, isSwingingToolDown, false, false, false, false);
+            //Pass in movement params to any listeners for player movement input.
+            EventHandler.CallMovementEvent(xInput, yInput, isWalking, isRunning, isIdle, isCarrying, toolEffect, isUsingToolRight, isUsingToolLeft, isUsingToolUp, isUsingToolDown, isLiftingToolRight, isLiftingToolLeft, isLiftingToolUp, isLiftingToolDown, isPickingRight, isPickingLeft, isPickingUp, isPickingDown, isSwingingToolRight, isSwingingToolLeft, isSwingingToolUp, isSwingingToolDown, false, false, false, false);
+
+        }
+
 
         #endregion
     }
@@ -156,8 +164,34 @@ public class Player : SingletonMonobehaviour<Player>   //Inherits from singleton
         }
     }
 
+    private void ResetMovement()
+    {
+        xInput = 0f;
+        yInput = 0f;
+        isWalking = false;
+        isRunning = false;
+        isIdle = true;
+        
+    }
 
-   
+    public void DisablePlayerInputAndResetMovement()
+    {
+        DisablePlayerInput();
+        ResetMovement();
+
+        //Send event to any listeners for player movement input (same as in update).
+        EventHandler.CallMovementEvent(xInput, yInput, isWalking, isRunning, isIdle, isCarrying, toolEffect, isUsingToolRight, isUsingToolLeft, isUsingToolUp, isUsingToolDown, isLiftingToolRight, isLiftingToolLeft, isLiftingToolUp, isLiftingToolDown, isPickingRight, isPickingLeft, isPickingUp, isPickingDown, isSwingingToolRight, isSwingingToolLeft, isSwingingToolUp, isSwingingToolDown, false, false, false, false);
+
+    }
+
+    public void DisablePlayerInput() => PlayerInputIsDisabled = true;
+    public void EnablePlayerInput() => PlayerInputIsDisabled = false;
+
+
+    public Vector3 GetPlayerViewportPosition()   //Gets camera position (viewport) of player. Viewport is (0,0) for bottom left, (1,1) for top right.
+    {
+        return mainCamera.WorldToViewportPoint(transform.position);
+    }
 
 
 

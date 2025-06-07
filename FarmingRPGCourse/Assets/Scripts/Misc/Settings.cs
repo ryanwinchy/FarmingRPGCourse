@@ -3,14 +3,18 @@ using UnityEngine;
 public static class Settings     //This would be better as singleton instead of static, as then could edit settings in editor / runtime. Or a scriptable object.
 {
 
-    [Header("Obscuring Item Fade Settings")]
+    //Obscuring item fade settings.
     public const float FADE_IN_SECONDS = 0.25f;
     public const float FADE_OUT_SECONDS = 0.35f;
     public const float TARGET_ALPHA = 0.45f;
 
-    [Header("Player Movement Settings")]
+    //Player movement settings.
     public const float RUNNING_SPEED = 5.333f;
     public const float WALKING_SPEED = 2.666f;
+
+    //Inventory
+    public static int playerInitialInventoryCapacity = 24;  //starting.
+    public static int playerMaximumInventoryCapacity = 48;      //if upgrade.
 
     //Player animation parameters, cleaner and kinder on memory than using strings.
     public static int xInput;
@@ -40,6 +44,15 @@ public static class Settings     //This would be better as singleton instead of 
     public static int idleDown;
     public static int idleLeft;
     public static int idleRight;
+
+    //Tools.
+    public const string HOEING_TOOL = "Hoe";
+    public const string CHOPPING_TOOL = "Axe";
+    public const string BREAKING_TOOL = "Pickaxe";
+    public const string REAPING_TOOL = "Scythe";
+    public const string WATERING_TOOL = "Watering Can";
+    public const string COLLECTING_TOOL = "Basket";
+    
 
 
 
@@ -75,8 +88,8 @@ public static class Settings     //This would be better as singleton instead of 
         idleDown = Animator.StringToHash("idleDown");
         idleLeft = Animator.StringToHash("idleLeft");
         idleRight = Animator.StringToHash("idleRight");
-        
-        
+
+
     }
 
 

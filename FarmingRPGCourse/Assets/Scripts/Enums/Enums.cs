@@ -1,4 +1,11 @@
 
+public enum InventoryLocation
+{
+    Player,
+    Chest,
+    Count      //How many types of inventory locations there are.
+}
+
 public enum ToolEffect
 {
     None,
