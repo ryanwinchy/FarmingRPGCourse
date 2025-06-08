@@ -217,6 +217,7 @@ Transform:
   - {fileID: 912810384}
   - {fileID: 1249455211}
   - {fileID: 1395213143}
+  - {fileID: 1140845811}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &26738487
@@ -231,6 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0708bf454a7dfe544ab085df49f6c7a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  equippedItemSpriteRenderer: {fileID: 912810385}
 --- !u!114 &26738488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1171,8 +1173,8 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1.0003113
-    height: 0.99993086
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -1647,7 +1649,7 @@ Transform:
   m_GameObject: {fileID: 912810383}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1944,6 +1946,76 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1140845810
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1140845811}
+  - component: {fileID: 1140845812}
+  m_Layer: 0
+  m_Name: CharacterCustomiser
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1140845811
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1140845810}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 26738486}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1140845812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1140845810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8309c729df8bed14d85073fc148a8d4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 26738483}
+  soAnimationTypeArray:
+  - {fileID: 11400000, guid: ab585b552bd194e4dacee68b62d5351e, type: 2}
+  - {fileID: 11400000, guid: 27ff273245719f74ebe5044d00e2aadf, type: 2}
+  - {fileID: 11400000, guid: 1bba5655286607d438921c3130a23bc3, type: 2}
+  - {fileID: 11400000, guid: ae07ebdc4fc4bfc499197c118688d170, type: 2}
+  - {fileID: 11400000, guid: 16209c7007753aa459acad660def9ca9, type: 2}
+  - {fileID: 11400000, guid: 49dd98394a5bba14aa23c8f6e54118eb, type: 2}
+  - {fileID: 11400000, guid: 07def385e4e92f740932d2c0d715e6dd, type: 2}
+  - {fileID: 11400000, guid: c0f0b0772d82f2e4d8439be714d1c341, type: 2}
+  - {fileID: 11400000, guid: 2871f21c17611cc44bb2757bb2c349b9, type: 2}
+  - {fileID: 11400000, guid: 7b0f90c095e4b884e8cf59a095da08ee, type: 2}
+  - {fileID: 11400000, guid: cec41d27c1382b14cab3edf8c0b600d5, type: 2}
+  - {fileID: 11400000, guid: e909439a2282ee841aec4c3db8d4c2da, type: 2}
+  - {fileID: 11400000, guid: a71bd8a9b6c14cf44beaf2ff733c5c07, type: 2}
+  - {fileID: 11400000, guid: 4e4a60ed006b6b24cbf286b7c4890529, type: 2}
+  - {fileID: 11400000, guid: f9ab0afef487d624c92365bbb451194f, type: 2}
+  - {fileID: 11400000, guid: c0c351cd81902d84bb9e1b613bdbb23f, type: 2}
+  - {fileID: 11400000, guid: 3510ef6cdd7aa1c418275313acc93c1a, type: 2}
+  - {fileID: 11400000, guid: 4921255c21377e944a3d16599e6a5f71, type: 2}
+  - {fileID: 11400000, guid: 267e7f019f93a72499ea61d17847f370, type: 2}
+  - {fileID: 11400000, guid: 3dcfd6263e045eb4193861d971ceea9d, type: 2}
+  - {fileID: 11400000, guid: b2d9e9c8b0f46c446af43a1693af1fcc, type: 2}
+  - {fileID: 11400000, guid: 1e7f3d16770d0b34e868cd2ee9890105, type: 2}
+  - {fileID: 11400000, guid: a2d770bd6dfc44543a6dce422d24aa2b, type: 2}
+  - {fileID: 11400000, guid: 47874daa92c3e5d4c831b1f17c83b17f, type: 2}
 --- !u!1001 &1225139798
 PrefabInstance:
   m_ObjectHideFlags: 0

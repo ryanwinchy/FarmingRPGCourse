@@ -1,3 +1,68 @@
+public enum AnimationName
+{
+    IdleDown,
+    IdleUp,
+    IdleRight,
+    IdleLeft,
+    WalkDown,
+    WalkUp,
+    WalkRight,
+    WalkLeft,
+    RunUp,
+    RunDown,
+    RunRight,
+    RunLeft,
+    UseToolUp,
+    UseToolDown,
+    UseToolRight,
+    UseToolLeft,
+    SwingToolUp,
+    SwingToolDown,
+    SwingToolRight,
+    SwingToolLeft,
+    LiftToolUp,
+    LiftToolDown,
+    LiftToolRight,
+    LiftToolLeft,
+    HoldToolUp,
+    HoldToolDown,
+    HoldToolRight,
+    HoldToolLeft,
+    PickUp,
+    PickRight,
+    PickLeft,
+    PickDown,
+    Count
+
+}
+
+public enum CharacterPartAnimator
+{
+    Body,
+    Arms,
+    Hair,
+    Tool,
+    Hat,
+    Count
+}
+
+public enum PartVariantColour
+{
+    None,
+    Count
+}
+
+public enum PartVariantType    //as anims vary based on what we carry. We override the animation.
+{
+    None,
+    Carry,
+    Hoe,
+    Pickaxe,
+    Axe,
+    Scythe,
+    WateringCan,
+    Count
+}
 
 public enum InventoryLocation
 {

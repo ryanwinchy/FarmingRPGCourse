@@ -1,7 +1,11 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Player : SingletonMonobehaviour<Player>   //Inherits from singleton, so runs the singleton monobehaviour Awake method. Just one instance.
 {                                //Player is a singleton, only one, makes easier to reference and save. And only 1 player.
+
+    
+    AnimationOverrides animationOverrides;
 
     //Movement parameters.
 
@@ -24,7 +28,16 @@ public class Player : SingletonMonobehaviour<Player>   //Inherits from singleton
 #pragma warning disable 414      //Disable console warning for unused player direction.
     Direction playerDirection;   //Will save current direction player is facing.
 #pragma warning restore 414
+
+    List<CharacterAttribute> characterAttributeCustomisationList;   //things we want to swap out anims for. like arms for carrying.
     float movementSpeed;
+
+    [Tooltip("Populate with prefab with the equipped item sprite renderer.")]  //So we can put equipped item like pumpkin above head on player.
+    [SerializeField] SpriteRenderer equippedItemSpriteRenderer = null;
+
+    //Player attributes that can be swapped.
+    CharacterAttribute armsCharacterAttribute;
+    CharacterAttribute toolCharacterAttribute;
 
     public bool PlayerInputIsDisabled { get; set; } = false;
 
@@ -36,6 +49,13 @@ public class Player : SingletonMonobehaviour<Player>   //Inherits from singleton
         base.Awake();            //Execute the parent awake, making it singleton.
 
         rigidBody2D = GetComponent<Rigidbody2D>();
+
+        animationOverrides = GetComponentInChildren<AnimationOverrides>();    //this is our script to override animators based on things like carrying, it goes on same object as animators.
+
+        //Initialise swappable character attributes.
+        armsCharacterAttribute = new CharacterAttribute(CharacterPartAnimator.Arms, PartVariantColour.None, PartVariantType.None);
+
+        characterAttributeCustomisationList = new List<CharacterAttribute>();
 
         mainCamera = Camera.main;    //This is intensive so best to cache.
     }
@@ -186,6 +206,45 @@ public class Player : SingletonMonobehaviour<Player>   //Inherits from singleton
 
     public void DisablePlayerInput() => PlayerInputIsDisabled = true;
     public void EnablePlayerInput() => PlayerInputIsDisabled = false;
+
+
+    public void ClearCarriedItem()
+    {
+        equippedItemSpriteRenderer.sprite = null;
+        equippedItemSpriteRenderer.color = new Color(1f, 1f, 1f, 0f);
+
+        //Apple base char arms animation. SO we overrode to get arms carrying animator, now we want base.
+        armsCharacterAttribute.partVariantType = PartVariantType.None;
+
+        characterAttributeCustomisationList.Clear();
+        characterAttributeCustomisationList.Add(armsCharacterAttribute);
+
+        animationOverrides.ApplyCharacterCustomisationParameters(characterAttributeCustomisationList);
+
+        isCarrying = false;
+    }
+
+    public void ShowCarriedItem(int itemCode)
+    {
+        ItemDetails itemDetails = InventoryManager.Instance.GetItemDetails(itemCode);
+
+        if (itemDetails != null)
+        {
+            equippedItemSpriteRenderer.sprite = itemDetails.itemSprite;    //set sprite to item passed in and full opacity.
+            equippedItemSpriteRenderer.color = new Color(1f, 1f, 1f, 1f);
+
+            //Apply 'carry' character arms customisation by overriding animator.
+            armsCharacterAttribute.partVariantType = PartVariantType.Carry;
+
+            characterAttributeCustomisationList.Clear();
+            characterAttributeCustomisationList.Add(armsCharacterAttribute);
+
+            animationOverrides.ApplyCharacterCustomisationParameters(characterAttributeCustomisationList);   //applies carrying to animator.
+
+            isCarrying = true;
+        }
+    }
+
 
 
     public Vector3 GetPlayerViewportPosition()   //Gets camera position (viewport) of player. Viewport is (0,0) for bottom left, (1,1) for top right.

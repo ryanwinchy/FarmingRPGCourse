@@ -38,12 +38,35 @@ public class InventoryBarUI : MonoBehaviour
     {
         if (inventorySlotUIArray.Length > 0)
         {
-            foreach (InventorySlotUI inventorySlotUI in inventorySlotUIArray)   //Loop thru all inventory slots and clear them with blank sprite.
+            for (int i = 0; i < inventorySlotUIArray.Length; i++)   //Loop thru all inventory slots and clear them with blank sprite.
             {
-                inventorySlotUI.inventorySlotImage.sprite = blank16x16Sprite;
-                inventorySlotUI.textMeshProUGUI.text = "";
-                inventorySlotUI.itemDetails = null;
-                inventorySlotUI.itemQuantity = 0;
+                inventorySlotUIArray[i].inventorySlotImage.sprite = blank16x16Sprite;
+                inventorySlotUIArray[i].textMeshProUGUI.text = "";
+                inventorySlotUIArray[i].itemDetails = null;
+                inventorySlotUIArray[i].itemQuantity = 0;
+
+                SetHighlightedInventorySlots(i);       //Clears highlight or selects if selected.
+            }
+        }
+    }
+
+    /// <summary>
+    /// Clear all highlights from inventory bar.
+    /// </summary>
+    public void ClearHighlightOnInventorySlots()
+    {
+        if (inventorySlotUIArray.Length > 0)
+        {
+            for (int i = 0; i < inventorySlotUIArray.Length; i++)   //Loop thru all slots and clear highlights.
+            {
+                if (inventorySlotUIArray[i].isSelected)
+                {
+                    inventorySlotUIArray[i].isSelected = false;
+                    inventorySlotUIArray[i].inventorySlotHighlight.color = new Color(0f, 0f, 0f, 0f);
+
+                    //update inventory as item not selected.              //BAD CODE - SHOULD BE EVENTS MAKING THINGS HAPPEN SO DECOUPLED.
+                    InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.Player);
+                }
             }
         }
     }
@@ -73,6 +96,9 @@ public class InventoryBarUI : MonoBehaviour
                             inventorySlotUIArray[i].itemDetails = itemDetails;
                             inventorySlotUIArray[i].itemQuantity = inventoryList[i].itemQuantity;
 
+                            //Set highlighted inventory slots as inventory updated.
+                            SetHighlightedInventorySlots(i);
+
                         }
 
                     }
@@ -83,6 +109,38 @@ public class InventoryBarUI : MonoBehaviour
         }
 
     }
+
+    /// <summary>
+    /// Set the selected highlight by looping thru all and highlighting selected.
+    /// </summary>
+    public void SetHighlightedInventorySlots()
+    {
+        if (inventorySlotUIArray.Length > 0)
+        {
+            //loop thru all inventory slots and clear highlights.
+
+            for (int i = 0; i < inventorySlotUIArray.Length; i++)
+            {
+                SetHighlightedInventorySlots(i);
+            }
+        }
+    }
+
+    void SetHighlightedInventorySlots(int itemPosition)
+    {
+        if (inventorySlotUIArray.Length > 0 && inventorySlotUIArray[itemPosition].itemDetails != null)
+        {
+            if (inventorySlotUIArray[itemPosition].isSelected)
+            {
+                inventorySlotUIArray[itemPosition].inventorySlotHighlight.color = new Color(1f, 1f, 1f, 1f);
+
+                //update inventory to show item selected.
+                InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.Player, inventorySlotUIArray[itemPosition].itemDetails.itemCode);
+            }
+            
+        }
+    }
+
 
     private void SwitchInventoryBarPosition()
     {

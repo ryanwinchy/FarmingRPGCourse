@@ -4,9 +4,14 @@ using UnityEngine;
 //CONSTANTLY PASSING IN WHICH INVENTORY IT IS, INITIALISING ALL OF THEM. ITS LITERALLY WHAT INSTANCES ARE FOR. THIS IS NOT OBJECT ORIENTED.
 //GENUINLEY I COULD CODE IT BETTER AND WAY MORE UNDERSTANDABLE. BUT GOOD TO FOLLOW TUT JUST TO SEE HOW HE DOES CERTAIN THINGS FOR 2D TOP DOWN RPG. LIKE LAYERING.
 //MANAGING LISTS OF LISTS LIKE THIS IS JUST NEEDLESSLY CONFUSING, NOT CLEAN. WHOLE POINT OF OBJECT ORIENTED.
+
+//PLUS IS WEIRD AF WHERE DOING EVERYTHING IN CASE THERE IS ONE SINGLE OTHER CHEST THATS PERMANENT? JUST DUMB. A LOT OF PLACES HARD CODES IF PLAYER. JUST ILLOGICAL. SOME GOOD CODE FUNCTIONALITY,
+//BUT PLEASE DO NOT DO IN THIS STUPID CONFUSING WAY. DO OBJECT ORIENTED. INVENTORY INSTANCES. NOT PASSING IN WHICH INV IT IS CONSTANTLY, AWFUL.
 public class InventoryManager : SingletonMonobehaviour<InventoryManager>
 {
     Dictionary<int, ItemDetails> itemDetailsDictionary;             //put code in and get the item details.
+
+    int[] selectedInventoryItemArray;     //index of array is the inventory list it is (player is 0, chest is 1), and the value is the item code.
 
     public List<InventoryItem>[] inventoryLists;     //an array of inventory lists, one for each inventory location. index 0 is player, index 1 is chest.
 
@@ -24,6 +29,15 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
 
         //Create item details dictionary
         CreateItemDetailsDictionary();
+
+
+        //Initialise selected inventory item array.
+        selectedInventoryItemArray = new int[(int)InventoryLocation.Count];   //Initialise arrays of inventories, 0 is player, 1 is chest.
+
+        for (int i = 0; i < selectedInventoryItemArray.Length; i++)    //Set selected for each inventory (player and chest) to -1, meaning nothing selected.
+        {
+            selectedInventoryItemArray[i] = -1;
+        }
     }
 
     //ALSO NEEDLESSLY CONFUSING FOR A WORSE RESULT. NOT CLEAN. NOT OBJECT ORIENTED.
@@ -117,10 +131,24 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         }
     }
 
+
+    /// <summary>
+    /// Clear selected inventory item for InventoryLocation.
+    /// </summary>
+    public void ClearSelectedInventoryItem(InventoryLocation inventoryLocation)
+    {
+        selectedInventoryItemArray[(int)inventoryLocation] = -1;
+    }
+
+
+
+
+
+
     /// <summary>
     /// Search specified inventory (player or chest) for an item code, if already there return pos in array, or -1 if not there.
     /// </summary>
-    private int FindItemInInventory(InventoryLocation inventoryLocation, int itemCode)
+    public int FindItemInInventory(InventoryLocation inventoryLocation, int itemCode)
     {
         List<InventoryItem> inventoryList = inventoryLists[(int)inventoryLocation];   //get which inventory we are searching.
 
@@ -263,6 +291,15 @@ public class InventoryManager : SingletonMonobehaviour<InventoryManager>
         {
             inventoryList.RemoveAt(position);
         }
+    }
+
+
+    /// <summary>
+    /// Set the selected inventory item for InventoryLocation to itemCode.
+    /// </summary>
+    public void SetSelectedInventoryItem(InventoryLocation inventoryLocation, int itemCode)
+    {
+        selectedInventoryItemArray[(int)inventoryLocation] = itemCode;
     }
 
 

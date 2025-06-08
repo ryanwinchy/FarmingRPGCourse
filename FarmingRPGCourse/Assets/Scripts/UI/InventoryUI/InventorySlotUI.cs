@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
                                              //Standard interfaces for mouse drag events.       //When mouse enters and exits the slot so we can show tooltip.                          
-public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     Camera mainCamera;
 
@@ -16,6 +16,7 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public Image inventorySlotImage;
     public TextMeshProUGUI textMeshProUGUI;
     [SerializeField] InventoryBarUI inventoryBar;
+    [HideInInspector] public bool isSelected = false;
     [SerializeField] GameObject itemPrefab;
 
     [HideInInspector] public ItemDetails itemDetails;
@@ -37,11 +38,60 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
 
     /// <summary>
+    /// Sets this inventory slot as selected.
+    /// </summary>
+    void SetSelectedItem()   //called when click on inv slot.
+    {
+        //clear currently highlighted items.
+        inventoryBar.ClearHighlightOnInventorySlots();
+
+        //highlight this item on bar.
+        isSelected = true;
+
+        //set highlighted inventory on bar
+        inventoryBar.SetHighlightedInventorySlots();
+
+        //Set item selected in inventory.
+        InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.Player, itemDetails.itemCode);
+
+
+        if (itemDetails.canBeCarried)    //show player carrying item (override animators to carry).
+        {
+            Player.Instance.ShowCarriedItem(itemDetails.itemCode);
+        }
+        else    //show player carrying nothing (set player animators to base).
+        {
+            Player.Instance.ClearCarriedItem();
+        }
+        
+        
+        
+        
+    }
+
+    void ClearSelectedItem()
+    {
+        //clear currently highlighted.
+        inventoryBar.ClearHighlightOnInventorySlots();
+
+        isSelected = false;
+
+        //set no item selected in inventory.
+        InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.Player);
+
+
+        //clear player carrying item visuals.
+        Player.Instance.ClearCarriedItem();
+
+    }
+
+
+    /// <summary>
     /// Drops the item (if selected) at the current mouse position. Called by the DropItem event.
     /// </summary>
     private void DropSelectedItemAtMousePosition()
     {
-        if (itemDetails != null)
+        if (itemDetails != null && isSelected)        //Only drop if item was selected.
         {
             Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));    //Gets current mouse position in world space.
 
@@ -52,6 +102,12 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
             //Remove item from inventory.
             InventoryManager.Instance.RemoveItem(InventoryLocation.Player, item.ItemCode);
+
+            //if no more of item, clear selected.
+            if (InventoryManager.Instance.FindItemInInventory(InventoryLocation.Player, item.ItemCode) == -1)
+            {
+                ClearSelectedItem();
+            }
         }
     }
 
@@ -68,6 +124,8 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             //Get image component.
             Image draggedItemImage = draggedItem.GetComponentInChildren<Image>();
             draggedItemImage.sprite = inventorySlotImage.sprite;
+
+            SetSelectedItem();      //So as we drag it always selects item.
 
         }
     }
@@ -101,6 +159,9 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
                 //Destroy the tool tip text box if exists.
                 DestroyInventoryTextBox();
 
+                //Clear selected item. Because we are swapping things so dont want anything selected.
+                ClearSelectedItem();
+
             }
             else       //If dropping and not over inventory bar, attempt drop if it is droppable.
             {
@@ -112,6 +173,27 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
             //Enable keyboard input.
             Player.Instance.EnablePlayerInput();
+        }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        //if left click.
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            //if inv slot currently selected, deselect it.
+            if (isSelected)
+            {
+                ClearSelectedItem();
+            }
+            else
+            {
+                //if inv slot not currently selected, select it.
+                if (itemQuantity > 0)  //more than one so cant select empty slot.
+                {
+                    SetSelectedItem();
+                }
+            }
         }
     }
     
@@ -144,7 +226,7 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
                 inventoryBar.inventoryTextBoxGameObject.transform.position = new Vector3(transform.position.x, transform.position.y - 50f, transform.position.z);
             }
 
-         
+
         }
     }
 
