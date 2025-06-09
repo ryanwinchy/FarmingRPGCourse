@@ -71,6 +71,16 @@ public enum InventoryLocation
     Count      //How many types of inventory locations there are.
 }
 
+public enum Season
+{
+    Spring,
+    Summer,
+    Autumn,
+    Winter,
+    None,
+    Count
+}
+
 public enum ToolEffect
 {
     None,

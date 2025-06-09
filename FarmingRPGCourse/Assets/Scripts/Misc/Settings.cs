@@ -52,8 +52,10 @@ public static class Settings     //This would be better as singleton instead of 
     public const string REAPING_TOOL = "Scythe";
     public const string WATERING_TOOL = "Watering Can";
     public const string COLLECTING_TOOL = "Basket";
-    
 
+
+    //Time system.
+    public const float SECONDS_PER_GAME_SECOND = 0.012f;    //every .7 of a second IRL we have a game second. 
 
 
     //constructor to set up class.

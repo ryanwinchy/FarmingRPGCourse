@@ -72,6 +72,8 @@ public class Player : SingletonMonobehaviour<Player>   //Inherits from singleton
 
             PlayerWalkInput();
 
+            PlayerTestInput();
+
             //Pass in movement params to any listeners for player movement input.
             EventHandler.CallMovementEvent(xInput, yInput, isWalking, isRunning, isIdle, isCarrying, toolEffect, isUsingToolRight, isUsingToolLeft, isUsingToolUp, isUsingToolDown, isLiftingToolRight, isLiftingToolLeft, isLiftingToolUp, isLiftingToolDown, isPickingRight, isPickingLeft, isPickingUp, isPickingDown, isSwingingToolRight, isSwingingToolLeft, isSwingingToolUp, isSwingingToolDown, false, false, false, false);
 
@@ -81,7 +83,7 @@ public class Player : SingletonMonobehaviour<Player>   //Inherits from singleton
         #endregion
     }
     
-    private void FixedUpdate()    //Good to capture input in update and apply in fixed update.
+    private void FixedUpdate()    //Good to capture input in update and apply in fixed update. I THINK THIS IS WRONG - MAKING IT HAPPEN NEXT FRAME IS WEIRD, A TINY JITTER.
     {
         PlayerMovement();
     }
@@ -184,6 +186,22 @@ public class Player : SingletonMonobehaviour<Player>   //Inherits from singleton
         }
     }
 
+
+    /// <summary>
+    /// Temp routine for test input for advance time.
+    /// </summary>
+    void PlayerTestInput()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            TimeManager.Instance.TestAdvanceGameMinute();
+        }
+        else if (Input.GetKeyDown(KeyCode.G))
+        {
+            TimeManager.Instance.TestAdvanceGameDay();
+        }
+    }
+
     private void ResetMovement()
     {
         xInput = 0f;
@@ -191,7 +209,7 @@ public class Player : SingletonMonobehaviour<Player>   //Inherits from singleton
         isWalking = false;
         isRunning = false;
         isIdle = true;
-        
+
     }
 
     public void DisablePlayerInputAndResetMovement()
